@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Menu</title>
+		
+		<link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/gif" sizes="16x16">
+
+		<link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-3.3.5-dist/css/bootstrap.min.css') }}">
+		<link rel="stylesheet" href="{{ url_for('static', filename='vendor/Flat-UI/css/flat-ui.min.css') }}">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+
+	</head>
+	</body>
+		<header class="header clearfix">
+			<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
+                		<span class="sr-only">Toggle navigation</span>
+              		</button>
+					<a class="navbar-brand" href='/'>Restaurants</a>
+				</div>
+				<div class="collapse navbar-collapse" id="navbar-collapse-01">
+					{% if username and restaurant.user_id == user_id %}
+					<ul class="nav navbar-nav navbar-left">
+						<li><a href='{{url_for('NewMenuItem', restaurant_id = restaurant.id) }}'>Create a new menu item</a></li>
+					</ul>
+					{% endif %}
+					<ul class="nav navbar-nav navbar-right">
+						{% if username %}
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								{% if user_picture %}
+									<img src="{{user_picture}}" alt="{{ username }}">
+								{% endif %}
+								{{ username }} 
+								<b class="caret"></b>
+							</a>
+							<span class="dropdown-arrow"></span>
+							<ul class="dropdown-menu">
+								<li><a href='{{ url_for('disconnect') }}'>Logout</a></li>
+							</ul>
+						</li>		
+						{% else %}
+						<li>
+							<a href='{{ url_for('showLogin') }}'>Login</a>
+						</li>
+						{% endif %}
+					</ul>
+				</div>
+			</nav>
+
+		</header>
+		
+		<main class="container">
+
+			{% with messages = get_flashed_messages(with_categories=true) %}
+				{% if messages %}
+					<div class="alert {{ messages[0][0] }}" role="alert">
+						<ul>
+							{% for message in messages %}
+							<li><strong>{{ message[1] }}</strong></li>
+							{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
+			{% endwith %}
+			
+			<div class="container-fluid">
+				
+				{% if items|length > 0 %}
+					
+					<div class="restaurant-cover">
+						<img src="/{{filesPath}}/{{restaurant.picture}}" alt="" class="">	
+					</div>
+					
+					<section class="menu-items">
+						
+						<h1> 
+							<span class="green-sea">{{restaurant.name}}</span> <span class="small-h1">menu:</span>
+						</h1>
+						<br>
+
+						{% for course in courses %}
+							{% if course.length > 0 %}
+								<div class="group">
+									<h4>{{course.name}}</h4>
+									<hr>
+									<ul>
+										{% for item in course.menuItems %}
+										
+											<li class="col-md-3 col-sm-6 col-xs-12">
+												<div class="tile menu-item">
+													
+													<span class="label label-default palette-green-sea">{{item.price}}</span>	
+													<h3 class="tile-title">{{item.name}}</h3> 
+													<br>
+													<p>{{item.description}}</p>
+													<p>{{item.course_name}}</p>
+													
+													{% if username and item.user_id == user_id %}
+														<br>
+														<a class="btn btn-primary btn-large btn-block" href ='{{url_for('editMenuItem', restaurant_id = restaurant.id, menu_id = item.id) }}'>Edit</a>
+														<a class="btn btn-primary btn-large btn-block" href ='{{url_for('deleteMenuItem', restaurant_id = restaurant.id, menu_id = item.id) }}'>Delete</a>							
+													{% endif %}
+												</div>
+											</li>
+											{% if loop.index is divisibleby 2 %}
+												<div class="clearfix visible-sm-block"></div>
+											{% endif %}
+											{% if loop.index is divisibleby 4 %}
+												<div class="clearfix visible-md-block visible-lg-block"></div>
+											{% endif %}
+										
+										{% endfor %}
+									</ul>
+									<div class="clearfix"></div>
+									<br><br>
+								</div>
+							{% endif %}
+							
+						{% endfor %}
+
+					</section>
+				{% else %}
+
+					<h4>There are no items to display! </h4> <p>Start by creating a <a href='{{url_for('NewMenuItem', restaurant_id = restaurant.id) }}'>new menu item</a> .</p>
+					<br>
+					<br>
+					<br>	
+				{% endif %}
+
+			</div>
+
+		</main>
+		<footer>
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-7">
+						<h3 class="footer-title">About Restaurant app</h3>
+						<p>
+							Restaurant app is an application where you are shown the restaurant and its menus, organized by type
+							This project allows us to quickly know the pairs list for the next round.
+							Users can add their own restaurants and menus.
+						</p>
+
+					</div>
+
+					<div class="col-xs-5 hidden-xs">
+						<div class="footer-banner">
+						<h3 class="footer-title">Contacts</h3>
+							<ul>
+								<li><strong>email:</strong> <span>mpires@leya.com</span></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<script src="{{ url_for('static', filename='vendor/jquery/jquery-1.11.3.min.js') }}" type="text/javascript" charset="utf-8"></script>
+		<script src="{{ url_for('static', filename='vendor/Flat-UI/js/flat-ui.min.js') }}" type="text/javascript" charset="utf-8"></script>	
+	</body>
+</html>
