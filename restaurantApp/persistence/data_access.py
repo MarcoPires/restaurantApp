@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem, User, Course
 
 # bootstrap DB connection 
-def connect(database='sqlite:///restaurantmenu.db'):
+def connect(database='postgresql://catalog:catalog@localhost/catalog'):
     """Connect to the database.  Returns a database session."""
     try:
         engine = create_engine(database)

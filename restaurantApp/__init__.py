@@ -6,7 +6,9 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = config.data["upload_folder"]
 
 
+#from restaurantApp.router import views, jsonEndpoints, xmlEndpoints
 
-from restaurantApp.router import views, jsonEndpoints, xmlEndpoints
+from restaurantApp.router import jsonEndpoints, xmlEndpoints
 
-print "-------------> INIT"
+
+log = 'test'

@@ -1,0 +1,32 @@
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+import sys
+import logging
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0,"/var/www/html/restaurantApp/")
+from test import Base, Restaurant, MenuItem
+
+engine = create_engine('postgresql://catalog:catalog@localhost/catalog')
+Base.metadata.bind = engine
+
+DBSession = sessionmaker( bind = engine )
+session = DBSession()
+
+myFirstRestaurant = Restaurant(name = "Pizza Palace")
+session.add(myFirstRestaurant)
+session.commit()
+firstResult = session.query(Restaurant).first()
+firstRestaurantName = firstResult.name
+
+
+test = firstRestaurantName
+
+
+def application(environ, start_response):
+    status = '200 OK'
+    output = str(test)
+
+    response_headers = [('Content-type', 'text/plain'), ('Content-Length', str(len(output)))]
+    start_response(status, response_headers)
+
+    return [output]
