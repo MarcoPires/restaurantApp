@@ -9,6 +9,6 @@ app.config['UPLOAD_FOLDER'] = config.data["upload_folder"]
 #from restaurantApp.router import views, jsonEndpoints, xmlEndpoints
 
 from restaurantApp.router import jsonEndpoints, xmlEndpoints
-
+from restaurantApp.router import views
 
 log = 'test'
